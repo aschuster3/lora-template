@@ -2,7 +2,7 @@ permalink   : /:categories/:year/:title/
 markdown    : kramdown
 highlighter : pygments
 
-paginate: 2 #6
+paginate: 6
 comments: true
 paginate_path: "/page/:num"
 
@@ -13,30 +13,19 @@ sass:
   style: compressed
 
 # Site settings
-title: Lora
-description: "A free Jekyll theme"
-email: your-email@domain.com
+title: Andrew Schuster
+description: "I post stuff here"
+# email: your-email@domain.com
 baseurl: "" # the subpath of your site, e.g. /blog/
-#url: "http://yourdomain.com"
-url: "http://nandomoreira.me/lora"
-repository: "https://github.com/nandomoreirame/lora"
-disqus_shortname: "fernandomoreira"
-google_analytics: UA-52446115-1
+url: "https://schusteasy.com"
+repository: "https://github.com/aschuster3/aschuster3.github.io"
+#disqus_shortname: "fernandomoreira"
 
 # social footer
 social:
   github:
     slug: github
-    link: http://github.com/nandomoreirame
-  facebook:
-    slug: facebook
-    link: http://facebook.com/fernando.dev
-  twitter:
-    slug: twitter
-    link: http://twitter.com/nandomoreirame
-  instagram:
-    slug: instagram
-    link: http://instagram.com/nandomoreira.me
+    link: http://github.com/aschuster3
   linkedin:
     slug: linkedin
-    link: http://linkedin.com/in/nandomoreirame
+    link: http://linkedin.com/in/andrew-schuster-36bb7664

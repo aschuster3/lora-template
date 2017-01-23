@@ -4,8 +4,11 @@ title: About
 permalink: /about/
 ---
 
-This is the base Jekyll theme. You can find out more info about customizing your Jekyll theme, as well as basic Jekyll usage documentation at [jekyllrb.com](http://jekyllrb.com/)
+Welcome to what I assume to be my personal site.  I'll likely post things about personal projects or things I find interesting.
 
-You can find the source code for the Jekyll new theme at: [github.com/jglovier/jekyll-new](https://github.com/jglovier/jekyll-new)
+My day job (as of January 2017) involves copious amounts of Ruby (on Rails!) and CoffeeScript, but I can make sense of just about any language you put in front of me.
+I've done work with Python, JS, and Java.
 
-You can find the source code for Jekyll at [github.com/jekyll/jekyll](https://github.com/jekyll/jekyll)
+I've gotten as far as downloading Elm and Elixir, so that counts as knowing functional programming, right? Mapping and reducing and all that jazz.
+
+I make no promises on updating this About page regularly.

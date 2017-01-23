@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+  <head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="shortcut icon" href="/images/a-favicon.ico?" type="image/x-icon">
+<title> The birth of Slackbotbot | Andrew Schuster</title>
+<meta name="description" content="The birth of Slackbotbot">
+<meta name="keywords" content="slack robot side project">
+<link rel="stylesheet" href="/css/main.css">
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="theme-color" content="#2d67cc">
+<link rel="canonical" href="https://schusteasy.com/the-birth-of-slackbotbot">
+<link rel="alternate" type="application/rss+xml" title="Andrew Schuster" href="https://schusteasy.com/feed.xml" />
+<!--<script type="text/javascript">-->
+<!--var _gaq = _gaq || [];-->
+<!--_gaq.push(['_setAccount', '']);-->
+<!--_gaq.push(['_trackPageview']);-->
+<!--(function() {-->
+  <!--var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;-->
+  <!--ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';-->
+  <!--var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);-->
+<!--})();-->
+<!--</script>-->
+  </head>
+  <body class="single">
+    <main class="container">
+        <header class="site-header">
+  <div class="container txt-center">
+    <nav class="navbar">
+      <ul>
+        <li><a href="/">home</a></li>
+        <li class="divider">&bull;</li>
+        <li><a href="/about">about</a></li>
+      </ul>
+    </nav>
+    <a href="/" class="author-thumb">
+      <img src="/images/author.jpg" alt="Author thumbnail" class="dot">
+    </a>
+    <h1>Hi, I'm Andrew <small>I post stuff here</small></h1>
+  </div>
+</header>
+        <section class="main-content">
+          <article class="post">
+  <header class="post-header">
+    <h1 class="post-title">The birth of Slackbotbot</h1>
+    <p class="post-meta">Jan 22, 2017</p>
+  </header>
+  <div class="post-content">
+    <p>So this story starts late 2015, when somebody shows me <a href="https://www.youtube.com/watch?v=kvctQKIXM-o">this video</a> and tells me we need to make a
+Slackbotbot for the office. I agree and begin scouring the internet hoping somebody has done all the work for me with some script. No dice, so I
+begin my perilous journey into Slackbotbot.</p>
+<p>Some time passes (read: like, a year) and after a number of false starts I finally get some momentum going with the project.  Admittedly, the
+turning point was someone writing a <a href="https://github.com/simondlevy/BreezyCreate2">Python API for the Create 2</a>.</p>
+<p>For starters, here’s what I gathered to begin work. Most of this I had lying around from other hardware projects that I never did:</p>
+<table>
+  <tbody>
+    <tr>
+      <td><strong>Raspberry Pi 2B</strong></td>
+      <td>This probably works with other versions, but this is what I had.</td>
+    </tr>
+    <tr>
+      <td><strong>iRobot Create 2</strong></td>
+      <td>Surprisingly, there already existed a maker Roomba! Your mileage may vary with a standard Roomba. It comes with a serial to USB.</td>
+    </tr>
+    <tr>
+      <td><strong>Reachargable Portable battery</strong></td>
+      <td>I bought this when PokémonGo got popular, so now I’ve repurposed it here.</td>
+    </tr>
+    <tr>
+      <td><strong>McRoboface (optional)</strong></td>
+      <td><a href="https://www.kickstarter.com/projects/4tronix/mcroboface">Couldn’t resist</a></td>
+    </tr>
+    <tr>
+      <td><strong>SunFounder Project Super Starter Kit</strong></td>
+      <td>Apparently they still sell these.  Honestly, any sort of prototyping kit will do.</td>
+    </tr>
+  </tbody>
+</table>
+<p>I had the latest version of Rasbian Jesse installed and updated everything before starting. Hooking up the Pi to the Roomba was as simple
+as plugging in a USB. I had to remove the faceplate on the Roomba to reach the serial port.</p>
+<p>Step one is to crack into the Python API and see what kind of limitations we can expect to see from the Roomba. Some exploration showed that
+the API doesn’t natively expose as much as I would like, but it doesn’t take much work to coax out what we want. This gives us our first snippet!</p>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">breezycreate2</span> <span class="kn">import</span> <span class="n">Robot</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="c"># This is what the API actually exposes</span>
+<span class="n">outerBot</span> <span class="o">=</span> <span class="n">Robot</span><span class="p">()</span>
+<span class="c"># This is an inner reference that allows me to do</span>
+<span class="c"># some more fine tuned work</span>
+<span class="n">bot</span> <span class="o">=</span> <span class="n">outerBot</span><span class="o">.</span><span class="n">robot</span>
+<span class="c"># The commands are non-blocking, so I have to</span>
+<span class="c"># block manually with some well placed sleeps</span>
+<span class="n">bot</span><span class="o">.</span><span class="n">turn_clockwise</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+<span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">bot</span><span class="o">.</span><span class="n">turn_clockwise</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+<span class="n">bot</span><span class="o">.</span><span class="n">drive_straight</span><span class="p">(</span><span class="mi">300</span><span class="p">)</span>
+<span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">3.3</span><span class="p">)</span> <span class="c"># Gotta last as long as the action</span>
+<span class="n">bot</span><span class="o">.</span><span class="n">drive_straight</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+<span class="c"># Close the connection because we&#39;re not heathens</span>
+<span class="n">outerBot</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></code></pre></div>
+<p>Success! The Roomba fires to life, does a quick turn, and lurches forward!  I had to put it back on the charger myself, but hey,
+progress. Before closing out my work, I went ahead and (with the help of a friend better at this kind of stuff than I am) made
+some songs to play through the Roomba. Without explaining the whole Open Interface, the Roomba can store 4 “songs” of a certain
+length, and can play them back. After writing a quick helper to form and save the songs, we’ve got a singing vacuum.</p>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">breezycreate2</span> <span class="kn">import</span> <span class="n">Robot</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="c"># Helper to form the notes the way the API wants them</span>
+<span class="k">def</span> <span class="nf">addNote</span><span class="p">(</span><span class="n">note</span><span class="p">,</span> <span class="n">duration</span><span class="p">,</span> <span class="n">eighths</span><span class="o">=</span><span class="mi">12</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">note</span> <span class="o">+</span> <span class="s">&quot;,&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">duration</span> <span class="o">*</span> <span class="n">eighths</span><span class="p">))</span>
+<span class="c"># A classic</span>
+<span class="k">def</span> <span class="nf">createOdeToJoy</span><span class="p">():</span>
+    <span class="n">ode_to_joy</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
+    <span class="n">ode_to_joy</span> <span class="o">+=</span> <span class="n">addNote</span><span class="p">(</span><span class="s">&#39;E4&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;,&quot;</span>
+    <span class="n">ode_to_joy</span> <span class="o">+=</span> <span class="n">addNote</span><span class="p">(</span><span class="s">&#39;E4&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;,&quot;</span>
+    <span class="n">ode_to_joy</span> <span class="o">+=</span> <span class="n">addNote</span><span class="p">(</span><span class="s">&#39;F4&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;,&quot;</span>
+    <span class="n">ode_to_joy</span> <span class="o">+=</span> <span class="n">addNote</span><span class="p">(</span><span class="s">&#39;G4&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;,&quot;</span>
+    <span class="n">ode_to_joy</span> <span class="o">+=</span> <span class="n">addNote</span><span class="p">(</span><span class="s">&#39;G4&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;,&quot;</span>
+    <span class="n">ode_to_joy</span> <span class="o">+=</span> <span class="n">addNote</span><span class="p">(</span><span class="s">&#39;F4&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;,&quot;</span>
+    <span class="n">ode_to_joy</span> <span class="o">+=</span> <span class="n">addNote</span><span class="p">(</span><span class="s">&#39;E4&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;,&quot;</span>
+    <span class="n">ode_to_joy</span> <span class="o">+=</span> <span class="n">addNote</span><span class="p">(</span><span class="s">&#39;D4&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;,&quot;</span>
+    <span class="n">ode_to_joy</span> <span class="o">+=</span> <span class="n">addNote</span><span class="p">(</span><span class="s">&#39;C4&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;,&quot;</span>
+    <span class="n">ode_to_joy</span> <span class="o">+=</span> <span class="n">addNote</span><span class="p">(</span><span class="s">&#39;C4&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;,&quot;</span>
+    <span class="n">ode_to_joy</span> <span class="o">+=</span> <span class="n">addNote</span><span class="p">(</span><span class="s">&#39;D4&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;,&quot;</span>
+    <span class="n">ode_to_joy</span> <span class="o">+=</span> <span class="n">addNote</span><span class="p">(</span><span class="s">&#39;E4&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;,&quot;</span>
+    <span class="n">ode_to_joy</span> <span class="o">+=</span> <span class="n">addNote</span><span class="p">(</span><span class="s">&#39;E4&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;,&quot;</span>
+    <span class="n">ode_to_joy</span> <span class="o">+=</span> <span class="n">addNote</span><span class="p">(</span><span class="s">&#39;D4&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;,&quot;</span>
+    <span class="n">ode_to_joy</span> <span class="o">+=</span> <span class="n">addNote</span><span class="p">(</span><span class="s">&#39;D4&#39;</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">ode_to_joy</span>
+<span class="c"># Set everything like last time</span>
+<span class="n">outerBot</span> <span class="o">=</span> <span class="n">Robot</span><span class="p">()</span>
+<span class="n">bot</span> <span class="o">=</span> <span class="n">outerBot</span><span class="o">.</span><span class="n">robot</span>
+<span class="c"># In the background, this puts the song into</span>
+<span class="c"># one of the Roomba&#39;s &quot;registers&quot; and then</span>
+<span class="c"># calls it up, but for our purposes it just</span>
+<span class="c"># plays the notes</span>
+<span class="n">bot</span><span class="o">.</span><span class="n">play_song</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">createOdeToJoy</span><span class="p">())</span>
+<span class="n">outerBot</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></code></pre></div>
+<p>Some final notes: A problem that came up consistently at this stage was that the Roomba did some weird things if you
+didn’t time the sleeps properly, but fortunately we can read the state of the Roomba to find out if it’s busy. Going
+forward, some wrappers around the existing methods will be helpful so that we don’t have to worry about timing every
+time we make a call to do something.</p>
+<p>For the code here with a few other goodies and another song, I’ve added the code to GitHub <a href="https://github.com/aschuster3/slackbotbot-source/tree/master/the-birth-of-slackbotbot">here</a>.</p>
+  </div>
+</article>
+        </section>
+<footer class="site-footer txt-center">
+  <hr>
+  <ul class="social">
+      <li><a href="http://github.com/aschuster3" target="_blank"><i class="icon icon-github"></i></a></li>
+      <li><a href="http://linkedin.com/in/andrew-schuster-36bb7664" target="_blank"><i class="icon icon-linkedin"></i></a></li>
+  </ul>
+  <small>&copy; 2017 All rights reserved. Original theme made with <a href="http://jekyllrb.com" target="_blank">Jekyll</a> and <i class="icon icon-heart"></i></small>
+  <small>by <a href="http://nandomoreira.me" target="_blank">nandomoreira.me</a></small>
+</footer>
+    </main>
+  </body>
+</html>
